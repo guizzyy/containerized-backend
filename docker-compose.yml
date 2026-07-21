@@ -1,0 +1,30 @@
+services:
+  fastapi:
+    container_name: simple-webapp
+    build: .
+    networks:
+      - webapp-networks
+    ports:
+      - "8000:8000"
+    healthcheck:
+      test: ["curl", "-X", "GET", "localhost:8000/healthcheck"]
+      interval: 30s
+      timeout: 15s
+      retries: 3
+    depends_on:
+      postgres-db:
+        condition: service_healthy
+
+  postgres-db:
+    container_name: postgres
+    image: postgres:14-alpine
+    networks:
+      - webapp-network
+    ports:
+      - "127.0.0.1:5432:5432"
+    healthcheck:
+      test: ["pg_ready", "--host", "localhost", "--port", "5432"]
+      interval: 30s
+      timeout: 15s
+      retries: 5
+      start_period: 10s

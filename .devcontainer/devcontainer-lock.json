@@ -1,0 +1,9 @@
+{
+  "features": {
+    "ghcr.io/jsburckhardt/devcontainer-features/ruff:1": {
+      "version": "1.0.0",
+      "resolved": "ghcr.io/jsburckhardt/devcontainer-features/ruff@sha256:ecde5b4c67565ea73aca624e13931c3104e01ca079b37913ba7317e0c7508d2f",
+      "integrity": "sha256:ecde5b4c67565ea73aca624e13931c3104e01ca079b37913ba7317e0c7508d2f"
+    }
+  }
+}
