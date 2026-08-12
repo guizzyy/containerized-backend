@@ -1,15 +1,26 @@
-FROM python:3.14-alpine AS builder
+FROM python:3.14-slim AS builder
 
 WORKDIR /app
 
 COPY requirements.txt .
 
-RUN pip -m install --no-cache-dir requirements.txt
+RUN python -m venv /opt/venv
+RUN /opt/venv/bin/pip install --no-cache-dir -r requirements.txt
 
-FROM scratch
+FROM python:3.14-slim
 
-COPY --from=builder /app .
+RUN useradd -r -u 10001 -s /usr/sbin/nologin -M appuser
+
+WORKDIR /app
+
+COPY --from=builder /opt/venv /opt/venv
+
+ENV PATH="/opt/venv/bin:$PATH"
+
+COPY --chown=appuser:app:user ./app .
+
+USER 10001
 
 EXPOSE 8000
 
-# CMD ["fastapi", "dev"]
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
