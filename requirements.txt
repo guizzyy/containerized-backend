@@ -1,7 +1,6 @@
 fastapi>=0.138
 pydantic>=2.12
-sqlmodel
-psycopg
-psycopg-binary
-asyncpg
-uvicorn
+sqlmodel>=0.0.39
+psycopg>=3.3.4
+psycopg[binary]
+uvicorn>=0.52.4

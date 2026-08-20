@@ -3,6 +3,7 @@ from datetime import date
 
 class ResponseNote(BaseModel):
 
+    id: int
     title: str
     author: str
     date_creation: date

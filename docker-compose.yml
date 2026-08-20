@@ -1,13 +1,14 @@
 services:
   fastapi:
-    container_name: simple-webapp
     build: .
     networks:
       - webapp-network
     ports:
       - "8000:8000"
+    environment:
+      - DATABASE_URL=postgresql+psycopg://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres-db:5432/${POSTGRES_DB}
     healthcheck:
-      test: ["CMD-SHELL", "python -c import urllib.request"]
+      test: ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://localhost:8000/notes')\""]
       interval: 30s
       timeout: 15s
       retries: 3
@@ -16,18 +17,17 @@ services:
         condition: service_healthy
 
   postgres-db:
-    container_name: postgres
     image: postgres:14-alpine
     networks:
       - webapp-network
     volumes:
-      - db-data:/var/lib/postgres/data
+      - db-data:/var/lib/postgresql/data
     ports:
       - "127.0.0.1:5432:5432"
     environment:
-      - POSTGRES_USER=test_user
-      - POSTGRES_PASSWORD=Password1.
-      - POSTGRES_DB=web_db
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB -h localhost -p 5432"]
       interval: 30s

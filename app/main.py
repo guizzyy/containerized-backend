@@ -1,14 +1,21 @@
 from fastapi import FastAPI, Query
 from schemas.notes import ResponseNote, CreateNote
-from database.database import session
+from database.database import session, create_db_and_tables
 from typing import Sequence, Annotated
 from sqlmodel import select
 from models.notes import Note
+from contextlib import asynccontextmanager
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    create_db_and_tables()
+    yield
+
 
 app = FastAPI(
-    openapi_prefix="/app"
+    lifespan=lifespan
 )
-
 
 @app.get("/notes", response_model=Sequence[ResponseNote])
 def get_full_notes(
@@ -33,7 +40,10 @@ def create_note(
     db: session,
     note: CreateNote
 ):
-    db.add(note)
+    db_note = Note(**note.model_dump())
+    db.add(db_note)
     db.commit()
-    db.refresh(note)
+    db.refresh(db_note)
     return note
+
+

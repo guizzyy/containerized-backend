@@ -17,7 +17,7 @@ COPY --from=builder /opt/venv /opt/venv
 
 ENV PATH="/opt/venv/bin:$PATH"
 
-COPY --chown=appuser:app:user ./app .
+COPY --chown=appuser:appuser ./app .
 
 USER 10001
 

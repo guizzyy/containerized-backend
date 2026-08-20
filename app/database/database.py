@@ -1,17 +1,17 @@
 from sqlmodel import create_engine, MetaData, SQLModel, Session
 from typing import Annotated
 from fastapi import Depends
+import os
 
-
-POSTGRES_DB = "postgresql+psycopg://test_user:Password1.@postgres:5432/web_db"
+DATABASE_URL = os.environ["DATABASE_URL"]
 
 # Begin the engine connection for the database (it can be multiple connections)
 engine = create_engine(
-    POSTGRES_DB,
+    DATABASE_URL,
     echo=True                  
 )
 
-# Create all the tables and database defined
+# Create all the tables and database defined (only for developments)
 def create_db_and_tables():
     SQLModel.metadata.create_all(engine)
 
