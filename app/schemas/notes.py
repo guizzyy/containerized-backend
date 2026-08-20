@@ -1,17 +1,22 @@
+from datetime import datetime
+
 from pydantic import BaseModel
-from datetime import date
+
+
+class GenericResponse(BaseModel):
+    message: str
 
 class ResponseNote(BaseModel):
 
     id: int
     title: str
     author: str
-    date_creation: date
-    date_update: date
-    type: str
+    date_creation: datetime
+    date_update: datetime
+    type: str | None
 
 class CreateNote(BaseModel):
 
     title: str
     author: str
-    type: str
+    type: str | None
