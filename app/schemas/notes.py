@@ -12,7 +12,6 @@ class ResponseNote(BaseModel):
     title: str
     author: str
     date_creation: datetime
-    date_update: datetime
     type: str | None
 
 class CreateNote(BaseModel):

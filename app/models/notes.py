@@ -10,5 +10,4 @@ class Note(SQLModel, table=True):
     title: str = Field(unique=True)
     author: str
     date_creation: datetime = Field(default_factory=datetime.now)
-    date_update: datetime = Field(default_factory=datetime.now)
     type: str | None = Field(default=None)

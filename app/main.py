@@ -22,7 +22,7 @@ app = FastAPI(
 @app.get("/notes", response_model=Sequence[ResponseNote])
 def get_full_notes(
     db: session,
-    offset: int | None = 0,
+    offset: Annotated[int, Query(ge=0)] = 0,
     limit: Annotated[int, Query(le=100)] = 100
 ):
     notes = db.exec(select(Note).offset(offset).limit(limit)).all()
@@ -34,7 +34,7 @@ def get_note_by_id(
     db: session,
     id: int
 ):
-    note = db.exec(select(Note).where(Note.id == id)).one_or_none()
+    note = db.get(Note, id)
     if not note:
         raise HTTPException(status_code=404, detail="Note not found")
     return note

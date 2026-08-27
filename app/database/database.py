@@ -9,7 +9,6 @@ DATABASE_URL = os.environ["DATABASE_URL"]
 # Begin the engine connection for the database (it can be multiple connections)
 engine = create_engine(
     DATABASE_URL,
-    echo=True                  
 )
 
 # Create all the tables and database defined (only for developments)
